@@ -1155,35 +1155,81 @@ where attribute_set_name like '%ship%'
 select * from eav_attribute_set
 where attribute_set_name like '%ship%'
 
+-- category attributes missing task  : https://plumtreeinc.teamwork.com/#/tasks/15996418
 
 -- Sacraments (ID: 13)
 SELECT * FROM `catalog_category_entity_text`
 where entity_id=13  and attribute_id in (1420,1419,1424,1408,2915,1423);
 
 SELECT * FROM eav_entity_type;
+--    ID  code                            front end label                       migration status
+# 2931	display_left_nav	            Display Only Left Categories            DONE(330)
+# 2932	display_left_category	        Display Left Category As                DONE(328)
+# 2934	image_text	                    Image Text                              DONE(314)
+# 1408	m_show_in_layered_navigation	Show In Layered Navigation Filter       DONE(0) - ab ye kahani ulti he. es attriubte ki m1 ki data neche wala attriube me jaegi
+# 2930	show_in_layered_navigation	    Show In Layered Navigation Filter       DONE(1417) - M1 ME 0 RECRODS FOUND FOR show_in_layered_navigation CODE
+# 2933	slider_image	                Home Page Slider Image
 
-SELECT * FROM `eav_attribute` where entity_type_id=3 and frontend_label in ('Show In Layered Navigation Filter','Display Left Category As','Display Only Left Categories','Home Page Slider Image','Image Text')
+SELECT attribute_id,attribute_code,frontend_label FROM `eav_attribute` where entity_type_id=3 and frontend_label in ('Show In Layered Navigation Filter','Display Left Category As','Display Only Left Categories','Home Page Slider Image','Image Text')
 union
-SELECT * FROM `rgw_eav_attribute` where entity_type_id=3 and frontend_label in ('Show In Layered Navigation Filter','Display Left Category As','Display Only Left Categories','Home Page Slider Image','Image Text');
+SELECT attribute_id,attribute_code,frontend_label FROM `rgw_eav_attribute` where entity_type_id=3 and frontend_label in ('Show In Layered Navigation Filter','Display Left Category As','Display Only Left Categories','Home Page Slider Image','Image Text');
+
 -- 1420
 -- 1419,3,display_left_nav -- value =1
-SELECT * FROM `catalog_category_entity_text` where entity_id=13
-SELECT * FROM `rgw_catalog_category_entity_text` where entity_id=13
+-- attribute code : display_left_nav , attribute id : 2931
+-- step 1: attribute details
+select * from eav_attribute where frontend_label='Display Only Left Categories';   -- to see attribte details by attribute id or name
+select * from eav_attribute where attribute_id=2931;   -- to see attribte details by attribute id or name
+-- step 1 ends
+-- step 2: attribute used in product
+--  2931,2932
+SELECT * FROM `catalog_category_entity_int` where entity_id=13 and attribute_id=2931; -- union   -- es table data save ho rahi he category attribute display_left_nav ki ye manulaly test kr k dekhi admin sy
+SELECT * FROM `catalog_category_entity_int` where entity_id=13 and attribute_id=2932; -- union   -- es table data save ho rahi he category attribute display_left_nav ki ye manulaly test kr k dekhi admin sy
+-- --------------------------------------------------------------------------------------------
+SELECT * FROM `catalog_category_entity_text` where entity_id=13 and attribute_id=2932 -- union
+SELECT * FROM `catalog_category_entity_varchar` where entity_id=13 and attribute_id=2932 -- union
+SELECT * FROM `catalog_category_entity_decimal` where entity_id=13 and attribute_id=2932 -- union
+SELECT * FROM `catalog_category_entity_datetime` where entity_id=13 and attribute_id=2932;
+-- Backup table once : DONE
+-- Create table temp_apr_20_catalog_category_entity_int_bkp     select * from catalog_category_entity_int;
+-- Create table temp_apr_20_catalog_category_entity_text_bkp    select * from catalog_category_entity_text;
 
-SELECT * FROM `catalog_category_entity_int` where entity_id=13 and attribute_id=1420 union
-SELECT * FROM `catalog_category_entity_text` where entity_id=13 and attribute_id=1420 union
-SELECT * FROM `catalog_category_entity_varchar` where entity_id=13 and attribute_id=1420 union
-SELECT * FROM `catalog_category_entity_decimal` where entity_id=13 and attribute_id=1420 union
-SELECT * FROM `catalog_category_entity_datetime` where entity_id=13 and attribute_id=1420;
+-- ab pta lag gya k ks table me "display_left_nav" attribute ki data ja rahi he ab m1 or m2 ko compare krna he
+-- agr record kum hen to m1 me hi format kr k import krne hen
+-- m2 : if any record exist backup and delete it : DONE
+SELECT * FROM `catalog_category_entity_int` where attribute_id=2931; -- union   -- es table data save ho rahi he category attribute display_left_nav ki
+# INSERT INTO a53979e5_csw_mig.catalog_category_entity_int (value_id, attribute_id, store_id, entity_id, value) VALUES (26863, 2931, 0, 2183, 1);
+# INSERT INTO a53979e5_csw_mig.catalog_category_entity_int (value_id, attribute_id, store_id, entity_id, value) VALUES (26866, 2931, 0, 13, 1);
+SELECT * FROM `catalog_category_entity_int` where attribute_id=2932; -- union   -- es table data save ho rahi he category attribute display_left_nav ki
+# INSERT INTO a53979e5_csw_mig.catalog_category_entity_int (value_id, attribute_id, store_id, entity_id, value) VALUES (26863, 2932, 0, 2183, 1);
+# INSERT INTO a53979e5_csw_mig.catalog_category_entity_int (value_id, attribute_id, store_id, entity_id, value) VALUES (26866, 2932, 0, 13, 1);
+SELECT * FROM `catalog_category_entity_text` where attribute_id=2934; -- union   -- es table data save ho rahi he category attribute display_left_nav ki
+# INSERT INTO a53979e5_csw_mig.catalog_category_entity_text (value_id, attribute_id, store_id, entity_id, value) VALUES (41161, 2934, 0, 2183, 'Test');
+# INSERT INTO a53979e5_csw_mig.catalog_category_entity_text (value_id, attribute_id, store_id, entity_id, value) VALUES (41162, 2934, 0, 13, null);
+# INSERT INTO a53979e5_csw_mig.catalog_category_entity_text (value_id, attribute_id, store_id, entity_id, value) VALUES (41163, 2934, 0, 2869, null);
+# INSERT INTO a53979e5_csw_mig.catalog_category_entity_text (value_id, attribute_id, store_id, entity_id, value) VALUES (41164, 2934, 0, 2870, null);
+SELECT * FROM `catalog_category_entity_int` where attribute_id=2930; -- union   -- es table data save ho rahi he category attribute display_left_nav ki
+# INSERT INTO a53979e5_csw_mig.catalog_category_entity_int (value_id, attribute_id, store_id, entity_id, value) VALUES (26862, 2930, 0, 2183, 1);
+# INSERT INTO a53979e5_csw_mig.catalog_category_entity_int (value_id, attribute_id, store_id, entity_id, value) VALUES (26865, 2930, 0, 13, 1);
+# INSERT INTO a53979e5_csw_mig.catalog_category_entity_int (value_id, attribute_id, store_id, entity_id, value) VALUES (27528, 2930, 0, 2209, 1);
+
+SELECT * FROM `catalog_category_entity_varchar` where attribute_id=2933; -- union   -- es table data save ho rahi he category attribute display_left_nav ki
+
+--  NOW IMPORT M1 FORMATED as m2 data : DONE (m1 sy 330 row ki list formate bana k m2 me import ki queries)
+# SELECT '2931' as attribute_id, store_id, entity_id, value FROM `rgw_catalog_category_entity_int` where attribute_id=1419;
+# SELECT '2932' as attribute_id, store_id, entity_id, value FROM `rgw_catalog_category_entity_int` where attribute_id=1420;
+# SELECT '2934' as attribute_id, store_id, entity_id, value FROM `rgw_catalog_category_entity_text` where attribute_id=1424;
+# SELECT '2930' as attribute_id, store_id, entity_id, value FROM `rgw_catalog_category_entity_int` where attribute_id=1408;
+# SELECT '2933' as attribute_id, store_id, entity_id, value FROM `rgw_catalog_category_entity_varchar` where attribute_id=1423; -- slider image klie kum records thi to ese ki
+    # INSERT INTO catalog_category_entity_varchar(attribute_id, store_id, entity_id, value) VALUES ('2933', 0, 2869, 'category-banner-img01_2.jpg');
+    # INSERT INTO catalog_category_entity_varchar(attribute_id, store_id, entity_id, value) VALUES ('2933', 0, 2870, 'category-banner-img01_2_1.jpg');
+    # INSERT INTO catalog_category_entity_varchar(attribute_id, store_id, entity_id, value) VALUES ('2933', 0, 2871, 'shop_the_look_Cathedral.jpg');
+
+-- step 2 ends
 
 
-select * from eav_attribute where attribute_id=57
-select * from eav_attribute where attribute_id=45
-select * from eav_attribute where attribute_id=47
-select * from eav_attribute where attribute_id=58
-select * from eav_attribute where attribute_id=62
-select * from eav_attribute where attribute_id=186
-select * from eav_attribute where attribute_id=1492
+
+
 
 SELECT * FROM `catalog_category_entity_varchar` where entity_id=13
 

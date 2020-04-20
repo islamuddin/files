@@ -496,3 +496,61 @@ where attribute_id=1456  -- and entity_id=58921
 
 -- mysqldump -ua53979e5_csm1 -pPennyCloySecedeRues14 a53979e5_csm1 rgw_catalog_product_entity_varchar>a53979e5_csm1_rgw_catalog_product_entity_varchar_apr_14.sql
 
+-- category attributes task :
+-- 1420
+-- 1419,3,display_left_nav -- value =1
+-- attribute code : display_left_nav , attribute id : 2931
+-- step 1: attribute details
+select * from rgw_eav_attribute where frontend_label='Display Only Left Categories';   -- to see attribte details by attribute id or name
+select * from rgw_eav_attribute where attribute_id=1419;   -- to see attribte details by attribute id or name
+-- step 1 ends
+-- step 2: attribute used in products
+SELECT * FROM `rgw_catalog_category_entity_int` where entity_id=13 and attribute_id=1419; -- union   -- es table data save ho rahi he category attribute display_left_nav ki
+-- --------------------------------------------------------------------------------------------
+SELECT * FROM `rgw_catalog_category_entity_text` where entity_id=13 and attribute_id=1419 -- union
+SELECT * FROM `rgw_catalog_category_entity_varchar` where entity_id=13 and attribute_id=1419 -- union
+SELECT * FROM `rgw_catalog_category_entity_decimal` where entity_id=13 and attribute_id=1419 -- union
+SELECT * FROM `rgw_catalog_category_entity_datetime` where entity_id=13 and attribute_id=1419;
+
+-- format as to migrate to m2
+SELECT '2931' as attribute_id, store_id, entity_id, value FROM `rgw_catalog_category_entity_int` where attribute_id=1419; -- union   -- es table data save ho rahi he category attribute display_left_nav ki
+-- SELECT distinct store_id FROM `rgw_catalog_category_entity_int` where attribute_id=1419; -- union   -- es table data save ho rahi he category attribute display_left_nav ki
+
+
+
+-- step 1: attribute details
+select * from rgw_eav_attribute where frontend_label='Display Only Left Categories';   -- to see attribte details by attribute id or name
+select * from rgw_eav_attribute where frontend_label='Display Left Category As';   -- to see attribte details by attribute id or name
+select * from rgw_eav_attribute where frontend_label='Image Text';   -- to see attribte details by attribute id or name
+select * from rgw_eav_attribute where frontend_label='Show In Layered Navigation Filter';   -- to see attribte details by attribute id or name
+select * from rgw_eav_attribute where frontend_label='Home Page Slider Image';   -- to see attribte details by attribute id or name
+
+select * from rgw_eav_attribute where attribute_id=1423;   -- to see attribte details by attribute id or name
+-- step 1 ends
+-- step 2: attribute used in products
+-- GENERAL
+SELECT * FROM `rgw_catalog_category_entity_int` where attribute_id=1423;
+SELECT * FROM `rgw_catalog_category_entity_text` where attribute_id=1423;
+SELECT * FROM `rgw_catalog_category_entity_varchar` where attribute_id=1423;
+SELECT * FROM `rgw_catalog_category_entity_decimal` where attribute_id=1423;
+SELECT * FROM `rgw_catalog_category_entity_datetime` where attribute_id=1423;
+
+-- YE MIGRATING
+SELECT * FROM `rgw_catalog_category_entity_int` where attribute_id=1419; -- union   -- es table data save ho rahi he category attribute display_left_nav ki
+SELECT * FROM `rgw_catalog_category_entity_int` where attribute_id=1420;
+SELECT * FROM `rgw_catalog_category_entity_text` where attribute_id=1424
+SELECT * FROM `rgw_catalog_category_entity_int` where attribute_id=1408;
+SELECT * FROM `rgw_catalog_category_entity_varchar` where attribute_id=1423;
+
+-- format as to migrate to m2
+SELECT '2931' as attribute_id, store_id, entity_id, value FROM `rgw_catalog_category_entity_int` where attribute_id=1419; -- union   -- es table data save ho rahi he category attribute display_left_nav ki
+SELECT '2932' as attribute_id, store_id, entity_id, value FROM `rgw_catalog_category_entity_int` where attribute_id=1420;
+SELECT '2934' as attribute_id, store_id, entity_id, value FROM `rgw_catalog_category_entity_text` where attribute_id=1424;
+SELECT '2930' as attribute_id, store_id, entity_id, value FROM `rgw_catalog_category_entity_int` where attribute_id=1408;
+
+SELECT '2933' as attribute_id, store_id, entity_id, value FROM `rgw_catalog_category_entity_varchar` where attribute_id=1423;
+
+-- 1408
+-- SELECT distinct store_id FROM `rgw_catalog_category_entity_int` where attribute_id=1420; -- union   -- es table data save ho rahi he category attribute display_left_nav ki
+
+
