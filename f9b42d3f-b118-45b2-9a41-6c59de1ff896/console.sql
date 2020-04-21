@@ -1168,7 +1168,7 @@ SELECT * FROM eav_entity_type;
 # 2934	image_text	                    Image Text                              DONE(314)
 # 1408	m_show_in_layered_navigation	Show In Layered Navigation Filter       DONE(0) - ab ye kahani ulti he. es attriubte ki m1 ki data neche wala attriube me jaegi
 # 2930	show_in_layered_navigation	    Show In Layered Navigation Filter       DONE(1417) - M1 ME 0 RECRODS FOUND FOR show_in_layered_navigation CODE
-# 2933	slider_image	                Home Page Slider Image
+# 2933	slider_image	                Home Page Slider Image                  DONE(3)
 
 SELECT attribute_id,attribute_code,frontend_label FROM `eav_attribute` where entity_type_id=3 and frontend_label in ('Show In Layered Navigation Filter','Display Left Category As','Display Only Left Categories','Home Page Slider Image','Image Text')
 union
@@ -1180,6 +1180,12 @@ SELECT attribute_id,attribute_code,frontend_label FROM `rgw_eav_attribute` where
 -- step 1: attribute details
 select * from eav_attribute where frontend_label='Display Only Left Categories';   -- to see attribte details by attribute id or name
 select * from eav_attribute where attribute_id=2931;   -- to see attribte details by attribute id or name
+
+select * from eav_attribute where frontend_label='Salable Quantity';   -- to see attribte details by attribute id or name
+
+select * from eav_attribute where frontend_label='Salable Quantity';   -- to see attribte details by attribute id or name
+select * from eav_attribute where attribute_id=2931;   -- to see attribte details by attribute id or name
+
 -- step 1 ends
 -- step 2: attribute used in product
 --  2931,2932
@@ -1289,10 +1295,6 @@ and g.attribute_group_name='Shipping' and s.attribute_set_name='Migration_sanctu
 ORDER BY s.attribute_set_name,
          g.sort_order,
          ea.sort_order;
-
-select* from eav_attribute s where s.attribute_code like '%_fee%'
-select* from eav_attribute s where s.attribute_code like '%_group'
-
 -- 2895
 2898
 2899
@@ -1511,5 +1513,42 @@ select * from eav_attribute_option where attribute_id=2903
 
 select * from rgw_eav_attribute where attribute_code like '%group%'    -- 1465
 select * from rgw_eav_attribute_option where attribute_id=1465 where attribute_id=1465
+
+
+-- ------------------
+-- CSW | PDP Add to cart and QTY box missing : https://plumtreeinc.teamwork.com/#/tasks/16377019?c=7779704
+-- step 1:
+-- count 121379 , visibility: not visible , type : simple product
+select count(*) from catalog_product_entity where type_id='simple' and entity_id in (select entity_id from catalog_product_entity_int where attribute_id=102 and value=1);
+
+-- step 2:
+# 185427	ZE4365SZ6
+# 185428	ZE4365SZ6.5
+# 185429	ZE4365SZ7
+# 185430	ZE4365SZ7.5
+select entity_id,sku from catalog_product_entity where entity_id in (185430,185429,185428,185427);
+select * from inventory_source_item where sku in (select sku from catalog_product_entity where entity_id in (185430,185429,185428,185427));
+# INSERT INTO a53979e5_csw_mig.inventory_source_item (source_item_id, source_code, sku, quantity, status) VALUES (34561, 'default', 'ZE4365SZ6.5', 0.0000, 1);
+
+-- backup before import : inventory_source_item
+# CREATE TABLE temp_apr_21_inventory_source_item_bkp select * from inventory_source_item;
+
+-- IMPORTING MISSING SALABLE QUANTITY
+-- insert into inventory_source_item(source_code, sku, quantity, status)
+select 'default' as source_code, sku, 0.0000 as quantity, 1 as status
+from catalog_product_entity where type_id = 'simple'  and entity_id in (select entity_id from catalog_product_entity_int where attribute_id = 102 and value = 1) and sku not in (select sku from inventory_source_item);
+
+
+-- step 2 : change in min qty n stock if needed
+select * from cataloginventory_stock_status where product_id=72813;
+
+select * from cataloginventory_stock_item where product_id=185429 union all
+select * from cataloginventory_stock_item where product_id=185430 union all
+select * from cataloginventory_stock_item where product_id=185428  union all
+select * from cataloginventory_stock_item where product_id=185427;
+# UPDATE cataloginventory_stock_item t SET t.`min_sale_qty` = 1.0000, t.`low_stock_date` = '2020-04-21 15:31:23', t.`stock_status_changed_auto` = 0 WHERE t.`item_id` = 272436
+
+
+
 
 
