@@ -5,7 +5,7 @@ select * from tp_customer_entity where email='id@plumtreegroup.net';
 -- reserve5@roadrunner.com              |   plumtree@1
 --                                      |   plumtree@1
 -- b91b49b9a17b412d47d9edd8ad8d6de5:JN  |   $2y$10$piHRdqOiKfvvwvOI4X/wHO/IujLm1mw3eNCe6STb9NaYR3QI8ko5i (not worked well but changed to ) : 56fae8213dda1488141b3d76f6c3b0dbdd52e5396224741624c4ce2ef4a0cee7:zifptXgI5FtkKbI1:2
--- b91b49b9a17b412d47d9edd8ad8d6de5:JN:0
+-- b91b49b9a17b412d47d9edd8ad8d6de5:JN:0 ( m2 me ye dia hua tha m1 sy alag tha customer ka )
 -- b91b49b9a17b412d47d9edd8ad8d6de5:JN:0
 
 # UPDATE `customer_entity`
